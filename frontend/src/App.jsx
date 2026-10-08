@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import SearchBar from './components/SearchBar';
-import StatusFilter from './components/StatusFilter';
-import TaskTable from './components/TaskTable';
-import { useTasks } from './hooks/useTasks';
+import { useState } from "react";
+import SearchBar from "./components/SearchBar";
+import StatusFilter from "./components/StatusFilter";
+import TaskTable from "./components/TaskTable";
+import { useTasks } from "./hooks/useTasks";
 
 export default function App() {
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('');
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
 
   const { tasks, total, loading, error } = useTasks(query, status, page, 10);
@@ -21,7 +21,13 @@ export default function App() {
       </header>
 
       <div className="controls">
-        <SearchBar value={query} onChange={setQuery} />
+        <SearchBar
+          value={query}
+          onChange={(val) => {
+            setQuery(val);
+            setPage(1);
+          }}
+        />
         <StatusFilter value={status} onChange={setStatus} />
       </div>
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { fetchTasks } from '../api';
+import { useState, useEffect } from "react";
+import { fetchTasks } from "../api";
 
 export function useTasks(query, status, page, pageSize) {
   const [tasks, setTasks] = useState([]);
@@ -8,17 +8,20 @@ export function useTasks(query, status, page, pageSize) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-
-    fetchTasks({ query, status, page, pageSize })
-      .then((data) => {
+    const loadTasks = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchTasks({ query, status, page, pageSize });
         setTasks(data.items);
         setTotal(data.total);
-        setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         setError(err.message);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTasks();
   }, [query, status, page, pageSize]);
 
   return { tasks, total, loading, error };
